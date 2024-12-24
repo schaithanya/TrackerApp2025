@@ -1,6 +1,6 @@
 {
-  "short_name": "Ionic App",
-  "name": "My Ionic App",
+  "short_name": "Personal Tracker",
+  "name": "My Personal Tracker",
   "icons": [
     {
       "src": "assets/icon/favicon.png",
