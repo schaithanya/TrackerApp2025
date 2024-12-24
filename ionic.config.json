@@ -1,0 +1,7 @@
+{
+  "name": "personal-tracker-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
