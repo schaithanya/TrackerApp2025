@@ -3,16 +3,10 @@ import { Redirect, Route } from 'react-router-dom';
 import LeftNavigation from './components/LeftNavigation'; // Import the LeftNavigation component
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
   IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { images, square, triangle } from 'ionicons/icons';
 import Savings from './pages/Savings';
 import Documents from './pages/Documents';
 import Passphrase from './pages/Passphrase';
@@ -55,36 +49,20 @@ const App: React.FC = () => {
     return (
         <IonApp>
             <IonReactRouter>
-                <LeftNavigation isOpen={isNavOpen} />
+                <LeftNavigation isOpen={isNavOpen} toggleNav={toggleNav} />
                 <Header toggleNav={toggleNav} /> {/* Pass the toggle function to the Header */}
-                <IonTabs> 
-                    <IonRouterOutlet>
-                        <Route exact path="/savings" component={Savings} />
-                        <Route exact path="/documents" component={Documents} />
-                        <Route exact path="/passphrase" component={Passphrase} />
-                        <Route exact path="/expense" component={Expense} />
-                        <Route exact path="/mystory" component={MyStory} />
-                        <Route exact path="/scheduler" component={Scheduler} />
-                        <Route exact path="/budget-planner" component={BudgetPlanner} />
-                        <Route exact path="/">
-                            <Redirect to="/savings" />
-                        </Route>
-                    </IonRouterOutlet>
-                    <IonTabBar slot="bottom">
-                        <IonTabButton tab="tab1" href="/tab1">
-                            <IonIcon aria-hidden="true" icon={triangle} />
-                            <IonLabel>Tab 1</IonLabel>
-                        </IonTabButton>
-                        <IonTabButton tab="tab2" href="/tab2">
-                            <IonIcon icon={images} />
-                            <IonLabel></IonLabel>
-                        </IonTabButton>
-                        <IonTabButton tab="tab3" href="/tab3">
-                            <IonIcon aria-hidden="true" icon={square} />
-                            <IonLabel>Tab 3</IonLabel>
-                        </IonTabButton>
-                    </IonTabBar>
-                </IonTabs>
+                <IonRouterOutlet>
+                    <Route exact path="/savings" component={Savings} />
+                    <Route exact path="/documents" component={Documents} />
+                    <Route exact path="/passphrase" component={Passphrase} />
+                    <Route exact path="/expense" component={Expense} />
+                    <Route exact path="/mystory" component={MyStory} />
+                    <Route exact path="/scheduler" component={Scheduler} />
+                    <Route exact path="/budget-planner" component={BudgetPlanner} />
+                    <Route exact path="/">
+                        <Redirect to="/savings" />
+                    </Route>
+                </IonRouterOutlet>
             </IonReactRouter>
         </IonApp>
     );
