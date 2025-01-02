@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButtons, IonModal, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonDatetime } from '@ionic/react';
 import Header from '../components/Header';
-import { add, menu, chevronBack, chevronForward } from 'ionicons/icons';
+import { add, menu, chevronBack, chevronForward, trash, pencil } from 'ionicons/icons';
 import MaterialTable, { Action, Column } from 'material-table';
 import { forwardRef } from 'react';
 import { getSavingsData, updateSavingsData, deleteSavingsData } from '../services/SavingsService';
@@ -54,15 +54,27 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
     }, []);
 
     const columns: Column<SavingsData>[] = [
-        { title: 'Type', field: 'savingType', type: 'string' },
-        { title: 'Amount', field: 'amount', type: 'numeric' },
+        { title: 'Type', field: 'savingType', type: 'string', cellStyle: { textAlign: 'left', fontSize: '0.8rem' }, headerStyle: { textAlign: 'left', fontSize: '0.8rem' } },
+        { title: 'Amount', field: 'amount', type: 'numeric', cellStyle: { textAlign: 'left', fontSize: '0.8rem' }, headerStyle: { textAlign: 'left', fontSize: '0.8rem' } },
         { 
             title: 'Interest', 
             field: 'interest',
             type: 'numeric',
-            render: rowData => (rowData.maturityAmount - rowData.amount).toLocaleString()
+            render: rowData => (rowData.maturityAmount - rowData.amount).toLocaleString(),
+            cellStyle: { textAlign: 'left', fontSize: '0.8rem' },
+            headerStyle: { fontSize: '0.8rem' }
         },
-        { title: 'End Date', field: 'endDate', type: 'string' }
+{ 
+    title: 'End Date', 
+    field: 'endDate', 
+    type: 'string',
+    render: rowData => {
+        const endDate = Array.isArray(rowData.endDate) ? rowData.endDate[0] : rowData.endDate;
+        return new Date(endDate).toLocaleDateString(); // Format to display only the date
+    },
+    cellStyle: { textAlign: 'left', fontSize: '0.8rem' },
+    headerStyle: { fontSize: '0.8rem' }
+}
     ];
 
     const handlePageChange = (page: number) => {
@@ -108,7 +120,7 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                                     <IonCardTitle style={{ fontSize: '1.2rem', fontWeight: 'bold', textAlign: 'center' }}>{type}</IonCardTitle>
                                 </IonCardHeader>
                                 <IonCardContent style={{ padding: '8px' }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.9rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.8rem' }}>
                                         <div><strong style={{ fontSize: '1.1rem' }}>Amount</strong></div>
                                         <div style={{ fontSize: '1.1rem' }}>₹{totals.amount.toLocaleString()}</div>
                                         <div><strong style={{ fontSize: '1.1rem' }}>Mat Amt</strong></div>
@@ -130,17 +142,19 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                     </IonButton>
                 </div>
 
-                <div style={{ padding: '16px' }}>                   
+                <div style={{ padding: '18px' }}>                   
                     <MaterialTable
                         title="Savings Details"
                         columns={columns}
                         data={savings}
+                        style={{ maxWidth: '50rem' }} // Set the desired width here
                         options={{
                             search: false,
                             paging: true,                            
-                            exportButton: true,
+                            exportButton: true, 
                             defaultExpanded: false,
-                            actionsColumnIndex: -1
+                            actionsColumnIndex: -1,
+                            sorting: false
                         }}
                         icons={{
                             Export: forwardRef<SVGSVGElement>((props, ref) => (
@@ -150,38 +164,38 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                             ))
                         }}
                         onChangePage={handlePageChange}
-                        onChangeRowsPerPage={handleRowsPerPageChange}                      
-                        actions={[
-                            {
-                                icon: 'Edit',
-                                tooltip: 'Edit Savings',
-                                onClick: async (event, rowData) => {
-                                    if (Array.isArray(rowData)) return;
-                                    setSelectedSavings(rowData);
-                                    setIsEditing(true);
-                                }
-                            },
-                            {
-                                icon: 'Delete',
-                                tooltip: 'Delete Savings',
-                                onClick: async (event, rowData) => {
-                                    if (Array.isArray(rowData)) return;
-                                    const confirmDelete = window.confirm('Are you sure you want to delete this savings entry?');
-                                    if (confirmDelete) {
-                                        try {
-                                            const index = savings.findIndex(s => s === rowData);
-                                            await deleteSavingsData(index);
-                                            // Create a new array to force state update
-                                            const newSavings = [...savings];
-                                            newSavings.splice(index, 1);
-                                            setSavings(newSavings);
-                                        } catch (error) {
-                                            console.error('Error deleting savings:', error);
-                                        }
-                                    }
-                                }
-                            }
-                        ]}
+                        onChangeRowsPerPage={handleRowsPerPageChange}                                       
+                        actions={[ 
+                        { 
+                            icon: () => <IonIcon icon={pencil} />, 
+                            tooltip: 'Edit Savings', 
+                            onClick: async (event, rowData) => { 
+                                if (Array.isArray(rowData)) return; 
+                                setSelectedSavings(rowData); 
+                                setIsEditing(true); 
+                            } 
+                        }, 
+                        { 
+                            icon: () => <IonIcon icon={trash} />, 
+                            tooltip: 'Delete Savings', 
+                            onClick: async (event, rowData) => { 
+                                if (Array.isArray(rowData)) return; 
+                                const confirmDelete = window.confirm('Are you sure you want to delete this savings entry?'); 
+                                if (confirmDelete) { 
+                                    try { 
+                                        const index = savings.findIndex(s => s === rowData); 
+                                        await deleteSavingsData(index); 
+                                        // Create a new array to force state update 
+                                        const newSavings = [...savings]; 
+                                        newSavings.splice(index, 1); 
+                                        setSavings(newSavings); 
+                                    } catch (error) { 
+                                        console.error('Error deleting savings:', error); 
+                                    } 
+                                } 
+                            } 
+                        } 
+                    ]}
                     />
                 </div>
             </IonContent>
