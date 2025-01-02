@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonContent, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonDatetime, IonTextarea, IonButton } from '@ionic/react';
+import { IonContent, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonDatetime, IonTextarea, IonButton, IonHeader, IonToolbar, IonTitle, IonDatetimeButton, IonModal } from '@ionic/react';
 import { SAVING_TYPES } from '../constants/savingTypes';
 import { saveSavingsData, SavingsData } from '../services/SavingsService';
 
@@ -49,7 +49,13 @@ const SavingsCreate: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
     };
 
     return (
-        <IonContent>
+        <>
+            <IonHeader>
+                <IonToolbar>
+                    <IonTitle>Create Saving</IonTitle>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent>
             <IonItem>
                 <IonLabel position="stacked">Saving Name</IonLabel>
                 <IonInput
@@ -90,18 +96,28 @@ const SavingsCreate: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
 
             <IonItem>
                 <IonLabel position="stacked">Start Date</IonLabel>
-                <IonDatetime
-                    value={formData.startDate}
-                    onIonChange={e => handleInputChange('startDate', e.detail.value!)}
-                />
+                <IonDatetimeButton datetime="startDate"></IonDatetimeButton>
+                <IonModal keepContentsMounted={true}>
+                    <IonDatetime
+                        id="startDate"
+                        presentation="date"
+                        value={formData.startDate}
+                        onIonChange={e => handleInputChange('startDate', e.detail.value!)}
+                    />
+                </IonModal>
             </IonItem>
 
             <IonItem>
                 <IonLabel position="stacked">End Date</IonLabel>
-                <IonDatetime
-                    value={formData.endDate}
-                    onIonChange={e => handleInputChange('endDate', e.detail.value!)}
-                />
+                <IonDatetimeButton datetime="endDate"></IonDatetimeButton>
+                <IonModal keepContentsMounted={true}>
+                    <IonDatetime
+                        id="endDate"
+                        presentation="date"
+                        value={formData.endDate}
+                        onIonChange={e => handleInputChange('endDate', e.detail.value!)}
+                    />
+                </IonModal>
             </IonItem>
 
             <IonItem>
@@ -124,7 +140,8 @@ const SavingsCreate: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
                 <IonButton color="danger" onClick={onCancel}>Cancel</IonButton>
                 <IonButton color="success" onClick={handleSave}>Save</IonButton>
             </div>
-        </IonContent>
+            </IonContent>
+        </>
     );
 };
 

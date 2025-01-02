@@ -8,6 +8,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import SavingsDashboard from './pages/SavingsDashboard';
+import SavingsCreate from './pages/SavingsCreate';
 import Documents from './pages/Documents';
 import Passphrase from './pages/Passphrase';
 import Expense from './pages/Expense';
@@ -52,7 +53,15 @@ const App: React.FC = () => {
                 <LeftNavigation isOpen={isNavOpen} toggleNav={toggleNav} />               
                 <IonRouterOutlet>
                     <Route exact path="/savings">
-                        <SavingsDashboard toggleNav={toggleNav} onCreateNew={() => {}} />
+                        <SavingsDashboard 
+                            toggleNav={toggleNav} 
+                            onCreateNew={() => {
+                                window.location.pathname = '/savings/create';
+                            }}
+                        />
+                    </Route>
+                    <Route exact path="/savings/create">
+                        <SavingsCreate onCancel={() => window.history.back()} />
                     </Route>
                     <Route exact path="/documents">
                         <Documents toggleNav={toggleNav} />
