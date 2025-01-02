@@ -26,7 +26,7 @@ const LeftNavigation: React.FC<{ isOpen: boolean; toggleNav: () => void }> = ({ 
     ];
 
     const handleNavClick = (path: string) => {
-        history.push(path);
+        window.location.pathname = path       
     };
 
     return (
