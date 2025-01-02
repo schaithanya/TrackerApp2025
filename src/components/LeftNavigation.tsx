@@ -1,5 +1,14 @@
 import React from 'react';
-import { IonContent, IonList, IonItem, IonLabel } from '@ionic/react';
+import { IonContent, IonList, IonItem, IonLabel, IonIcon } from '@ionic/react';
+import { 
+  walletOutline, 
+  documentTextOutline, 
+  lockClosedOutline, 
+  cashOutline, 
+  bookOutline, 
+  calendarOutline, 
+  calculatorOutline 
+} from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import './LeftNavigation.css';
 
@@ -37,6 +46,17 @@ const LeftNavigation: React.FC<{ isOpen: boolean; toggleNav: () => void }> = ({ 
                                 onClick={() => handleNavClick(page.path)}
                                 className="nav-item"
                             >
+                                <IonIcon 
+                                    icon={
+                                        page.name === 'Savings' ? walletOutline :
+                                        page.name === 'Documents' ? documentTextOutline :
+                                        page.name === 'Passphrase' ? lockClosedOutline :
+                                        page.name === 'Expense' ? cashOutline :
+                                        page.name === 'MyStory' ? bookOutline :
+                                        page.name === 'Scheduler' ? calendarOutline :
+                                        calculatorOutline
+                                    }
+                                />
                                 <IonLabel>{page.name}</IonLabel>
                             </IonItem>
                         ))}

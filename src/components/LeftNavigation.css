@@ -4,10 +4,10 @@
     left: -300px;
     width: 300px;
     height: 100vh;
-    background: white;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
     z-index: 1000;
     transition: left 0.3s ease-in-out;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
 }
 
 .nav-container.open {
@@ -34,17 +34,45 @@
 
 .nav-title {
     text-align: center;
-    margin: 20px 0;
-    padding: 10px;
-    background-color: #f8f9fa;
+    margin: 0;
+    padding: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+    background: linear-gradient(145deg, #e9ecef, #ffffff);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .nav-item {
-    --padding-start: 20px;
-    --padding-end: 20px;
+    --padding-start: 15px;
+    --padding-end: 15px;
     --min-height: 50px;
+    --background-hover: rgba(108, 117, 125, 0.1);
+    --background-activated: rgba(108, 117, 125, 0.15);
+    margin: 0;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.nav-item ion-label {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #495057;
+    margin-left: 15px;
 }
 
 .nav-item:hover {
-    background-color: #f8f9fa;
+    transform: translateX(5px);
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item ion-icon {
+    color: #6c757d;
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
+}
+
+.nav-item:hover ion-icon {
+    color: #2c3e50;
 }
