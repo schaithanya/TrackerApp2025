@@ -10,8 +10,7 @@ const Header: React.FC<{ toggleNav: () => void }> = ({ toggleNav }) => {
                     <IonButton onClick={toggleNav}>
                         <IonIcon icon={menu} />
                     </IonButton>
-                </IonButtons>
-                <IonTitle style={{ color: 'white', textAlign: 'center' }}>Menu</IonTitle>
+                </IonButtons>                
             </IonToolbar>
         </IonHeader>
     );

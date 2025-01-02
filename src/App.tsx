@@ -7,7 +7,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Savings from './pages/Savings';
+import SavingsDashboard from './pages/SavingsDashboard';
 import Documents from './pages/Documents';
 import Passphrase from './pages/Passphrase';
 import Expense from './pages/Expense';
@@ -49,16 +49,29 @@ const App: React.FC = () => {
     return (
         <IonApp>
             <IonReactRouter>
-                <LeftNavigation isOpen={isNavOpen} toggleNav={toggleNav} />
-                <Header toggleNav={toggleNav} /> {/* Pass the toggle function to the Header */}
+                <LeftNavigation isOpen={isNavOpen} toggleNav={toggleNav} />               
                 <IonRouterOutlet>
-                    <Route exact path="/savings" component={Savings} />
-                    <Route exact path="/documents" component={Documents} />
-                    <Route exact path="/passphrase" component={Passphrase} />
-                    <Route exact path="/expense" component={Expense} />
-                    <Route exact path="/mystory" component={MyStory} />
-                    <Route exact path="/scheduler" component={Scheduler} />
-                    <Route exact path="/budget-planner" component={BudgetPlanner} />
+                    <Route exact path="/savings">
+                        <SavingsDashboard toggleNav={toggleNav} onCreateNew={() => {}} />
+                    </Route>
+                    <Route exact path="/documents">
+                        <Documents toggleNav={toggleNav} />
+                    </Route>
+                    <Route exact path="/passphrase">
+                        <Passphrase toggleNav={toggleNav} />
+                    </Route>
+                    <Route exact path="/expense">
+                        <Expense toggleNav={toggleNav} />
+                    </Route>
+                    <Route exact path="/mystory">
+                        <MyStory toggleNav={toggleNav} />
+                    </Route>
+                    <Route exact path="/scheduler">
+                        <Scheduler toggleNav={toggleNav} />
+                    </Route>
+                    <Route exact path="/budget-planner">
+                        <BudgetPlanner toggleNav={toggleNav} />
+                    </Route>
                     <Route exact path="/">
                         <Redirect to="/savings" />
                     </Route>
