@@ -98,18 +98,18 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                     
                     {Object.entries(savingsByType).map(([type, totals], index) => (
                         <div key={type} style={{ display: index === currentTypeIndex ? 'block' : 'none', width: '100%' }}>
-                            <IonCard style={{ maxWidth: '600px', width: '100%', margin: '0 auto' }}>
-                                <IonCardHeader>
-                                    <IonCardTitle style={{ fontSize: '1.2rem' }}>{type}</IonCardTitle>
+                             <IonCard style={{ maxWidth: '600px', width: '100%', margin: '0 auto', border: '1px solid #ccc' }}>
+                                <IonCardHeader style={{ borderBottom: '1px solid #ccc' }}>
+                                    <IonCardTitle style={{ fontSize: '1.2rem', fontWeight: 'bold', textAlign: 'center' }}>{type}</IonCardTitle>
                                 </IonCardHeader>
                                 <IonCardContent style={{ padding: '8px' }}>
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.9rem' }}>
-                                        <div>Amount</div>
-                                        <div>₹{totals.amount.toLocaleString()}</div>
-                                        <div>Mat Amt</div>
-                                        <div>₹{totals.maturity.toLocaleString()}</div>
-                                        <div>Interest</div>
-                                        <div>₹{(totals.maturity - totals.amount).toLocaleString()}</div>
+                                        <div><strong style={{ fontSize: '1.1rem' }}>Amount</strong></div>
+                                        <div style={{ fontSize: '1.1rem' }}>₹{totals.amount.toLocaleString()}</div>
+                                        <div><strong style={{ fontSize: '1.1rem' }}>Mat Amt</strong></div>
+                                        <div style={{ fontSize: '1.1rem' }}>₹{totals.maturity.toLocaleString()}</div>
+                                        <div><strong style={{ fontSize: '1.1rem' }}>Interest</strong></div>
+                                        <div style={{ fontSize: '1.1rem' }}>₹{(totals.maturity - totals.amount).toLocaleString()}</div>
                                     </div>
                                 </IonCardContent>
                             </IonCard>
@@ -125,17 +125,14 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                     </IonButton>
                 </div>
 
-                <div style={{ padding: '16px' }}>
-                    {/* eslint-disable react/prop-types */}
-                    {/* eslint-disable react/no-deprecated */}
+                <div style={{ padding: '16px' }}>                   
                     <MaterialTable
                         title="Savings Details"
                         columns={columns}
                         data={savings}
                         options={{
-                            search: true,
-                            paging: true,
-                            filtering: true,
+                            search: false,
+                            paging: true,                            
                             exportButton: true,
                             defaultExpanded: false
                         }}
