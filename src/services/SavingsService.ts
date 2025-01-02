@@ -62,3 +62,25 @@ export const getSavingsData = async (): Promise<SavingsData[]> => {
         return [];
     }
 };
+
+export const updateSavingsData = async (index: number, updatedData: SavingsData) => {
+    try {
+        const existingData: SavingsData[] = await getSavingsData();
+        existingData[index] = updatedData;
+        await fileService.writeFile(SAVINGS_FILE, JSON.stringify(existingData));
+    } catch (error) {
+        console.error('Error updating savings data:', error);
+        throw error;
+    }
+};
+
+export const deleteSavingsData = async (index: number) => {
+    try {
+        const existingData: SavingsData[] = await getSavingsData();
+        existingData.splice(index, 1);
+        await fileService.writeFile(SAVINGS_FILE, JSON.stringify(existingData));
+    } catch (error) {
+        console.error('Error deleting savings data:', error);
+        throw error;
+    }
+};

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButtons } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButtons, IonModal, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonDatetime } from '@ionic/react';
 import Header from '../components/Header';
 import { add, menu, chevronBack, chevronForward } from 'ionicons/icons';
 import MaterialTable, { Action, Column } from 'material-table';
-import { getSavingsData } from '../services/SavingsService';
+import { forwardRef } from 'react';
+import { getSavingsData, updateSavingsData, deleteSavingsData } from '../services/SavingsService';
 import { SavingsData } from '../services/SavingsService';
 import { SAVING_TYPES } from '../constants/savingTypes';
 
@@ -14,6 +15,8 @@ interface SavingsDashboardProps {
 
 const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggleNav }) => {
     const [savings, setSavings] = useState<SavingsData[]>([]);
+    const [selectedSavings, setSelectedSavings] = useState<SavingsData | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
     const [savingsByType, setSavingsByType] = useState<Record<string, { amount: number, maturity: number }>>({});
     const [currentTypeIndex, setCurrentTypeIndex] = useState(0);
 
@@ -51,11 +54,14 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
     }, []);
 
     const columns: Column<SavingsData>[] = [
-        { title: 'Name', field: 'savingName', type: 'string' },
         { title: 'Type', field: 'savingType', type: 'string' },
         { title: 'Amount', field: 'amount', type: 'numeric' },
-        { title: 'Maturity Amount', field: 'maturityAmount', type: 'numeric' },
-        { title: 'Start Date', field: 'startDate', type: 'string' },
+        { 
+            title: 'Interest', 
+            field: 'interest',
+            type: 'numeric',
+            render: rowData => (rowData.maturityAmount - rowData.amount).toLocaleString()
+        },
         { title: 'End Date', field: 'endDate', type: 'string' }
     ];
 
@@ -72,17 +78,16 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
             <IonHeader>
                 <IonToolbar style={{ backgroundColor: 'blue' }}>
                     <IonButtons slot="start">
-                                       <IonButton onClick={toggleNav}>
-                                           <IonIcon icon={menu} />
-                                       </IonButton>
-                                   </IonButtons>       
+                        <IonButton onClick={toggleNav}>
+                        <IonIcon icon={menu} />
+                            </IonButton>
+                        </IonButtons>       
                     <IonTitle>Savings Dashboard</IonTitle>
                     <IonButton 
                         slot="end" 
                         onClick={onCreateNew}
-                        style={{ marginRight: '10px' }}
-                    >
-                        <IonIcon icon={add} />
+                        style={{ marginRight: '10px' }}>
+                        <IonIcon icon={add} size="small" />
                     </IonButton>
                 </IonToolbar>
             </IonHeader>
@@ -93,7 +98,7 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                         disabled={Object.keys(savingsByType).length <= 1}
                         style={{ marginRight: '8px' }}
                     >
-                        <IonIcon icon={chevronBack} />
+                        <IonIcon icon={chevronBack} size="small" />
                     </IonButton>
                     
                     {Object.entries(savingsByType).map(([type, totals], index) => (
@@ -121,7 +126,7 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                         disabled={Object.keys(savingsByType).length <= 1}
                         style={{ marginLeft: '16px' }}
                     >
-                        <IonIcon icon={chevronForward} />
+                        <IonIcon icon={chevronForward} size="small" />
                     </IonButton>
                 </div>
 
@@ -134,29 +139,144 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                             search: false,
                             paging: true,                            
                             exportButton: true,
-                            defaultExpanded: false
+                            defaultExpanded: false,
+                            actionsColumnIndex: -1
+                        }}
+                        icons={{
+                            Export: forwardRef<SVGSVGElement>((props, ref) => (
+                                <svg {...props} ref={ref} viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                                </svg>
+                            ))
                         }}
                         onChangePage={handlePageChange}
-                        onChangeRowsPerPage={handleRowsPerPageChange}
+                        onChangeRowsPerPage={handleRowsPerPageChange}                      
                         actions={[
                             {
-                                icon: 'edit',
+                                icon: 'Edit',
                                 tooltip: 'Edit Savings',
-                                onClick: (event, rowData) => {
-                                    // TODO: Implement edit functionality
+                                onClick: async (event, rowData) => {
+                                    if (Array.isArray(rowData)) return;
+                                    setSelectedSavings(rowData);
+                                    setIsEditing(true);
                                 }
                             },
                             {
-                                icon: 'delete',
+                                icon: 'Delete',
                                 tooltip: 'Delete Savings',
-                                onClick: (event, rowData) => {
-                                    // TODO: Implement delete functionality
+                                onClick: async (event, rowData) => {
+                                    if (Array.isArray(rowData)) return;
+                                    const confirmDelete = window.confirm('Are you sure you want to delete this savings entry?');
+                                    if (confirmDelete) {
+                                        try {
+                                            const index = savings.findIndex(s => s === rowData);
+                                            await deleteSavingsData(index);
+                                            // Create a new array to force state update
+                                            const newSavings = [...savings];
+                                            newSavings.splice(index, 1);
+                                            setSavings(newSavings);
+                                        } catch (error) {
+                                            console.error('Error deleting savings:', error);
+                                        }
+                                    }
                                 }
                             }
                         ]}
                     />
                 </div>
             </IonContent>
+
+            <IonModal isOpen={isEditing} onDidDismiss={() => setIsEditing(false)}>
+                <IonHeader>
+                    <IonToolbar>
+                        <IonTitle>Edit Savings</IonTitle>
+                        <IonButtons slot="end">
+                            <IonButton onClick={() => setIsEditing(false)}>Close</IonButton>
+                        </IonButtons>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent>
+                    {selectedSavings && (
+                        <div style={{ padding: '16px' }}>
+                            <IonItem>
+                                <IonLabel position="stacked">Name</IonLabel>
+                                <IonInput
+                                    value={selectedSavings.savingName}
+                                    onIonChange={e => setSelectedSavings({ ...selectedSavings, savingName: e.detail.value! })}
+                                />
+                            </IonItem>
+
+                            <IonItem>
+                                <IonLabel position="stacked">Type</IonLabel>
+                                <IonSelect
+                                    value={selectedSavings.savingType}
+                                    onIonChange={e => setSelectedSavings({ ...selectedSavings, savingType: e.detail.value })}
+                                >
+                                    {SAVING_TYPES.map(type => (
+                                        <IonSelectOption key={type} value={type}>{type}</IonSelectOption>
+                                    ))}
+                                </IonSelect>
+                            </IonItem>
+
+                            <IonItem>
+                                <IonLabel position="stacked">Amount</IonLabel>
+                                <IonInput
+                                    type="number"
+                                    value={selectedSavings.amount}
+                                    onIonChange={e => setSelectedSavings({ ...selectedSavings, amount: parseFloat(e.detail.value!) })}
+                                />
+                            </IonItem>
+
+                            <IonItem>
+                                <IonLabel position="stacked">Maturity Amount</IonLabel>
+                                <IonInput
+                                    type="number"
+                                    value={selectedSavings.maturityAmount}
+                                    onIonChange={e => setSelectedSavings({ ...selectedSavings, maturityAmount: parseFloat(e.detail.value!) })}
+                                />
+                            </IonItem>
+
+                            <IonItem>
+                                <IonLabel position="stacked">Start Date</IonLabel>
+                                <IonDatetime
+                                    presentation="date"
+                                    locale="en-US"
+                                    value={selectedSavings.startDate}
+                                    onIonChange={e => setSelectedSavings({ ...selectedSavings, startDate: e.detail.value! })}
+                                />
+                            </IonItem>
+
+                            <IonItem>
+                                <IonLabel position="stacked">End Date</IonLabel>
+                                <IonDatetime
+                                    presentation="date"
+                                    locale="en-US"
+                                    value={selectedSavings.endDate}
+                                    onIonChange={e => setSelectedSavings({ ...selectedSavings, endDate: e.detail.value! })}
+                                />
+                            </IonItem>
+
+                            <IonButton
+                                expand="block"
+                                style={{ marginTop: '16px' }}
+                                onClick={async () => {
+                                    try {
+                                        const index = savings.findIndex(s => s === selectedSavings);
+                                        await updateSavingsData(index, selectedSavings!);
+                                        const updatedSavings = await getSavingsData();
+                                        setSavings(updatedSavings);
+                                        setIsEditing(false);
+                                    } catch (error) {
+                                        console.error('Error updating savings:', error);
+                                    }
+                                }}
+                            >
+                                Save Changes
+                            </IonButton>
+                        </div>
+                    )}
+                </IonContent>
+            </IonModal>
         </IonPage>
     );
 };
