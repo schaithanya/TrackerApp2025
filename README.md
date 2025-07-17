@@ -33,3 +33,21 @@ After the user navigates to Tab 2 (Photos), they can tap/click on the camera but
 3) Install all packages: `npm install`.
 4) Run on the web: `ionic serve`.
 5) Run on iOS or Android: See [here](https://ionicframework.com/docs/building/running).
+
+## How to Build APK
+
+1) Build the web assets:
+```
+npm run build
+```
+2) Sync the web assets to the Android project:
+```
+npx cap sync android
+```
+3) Build the APK using Gradle:
+```
+cd android
+gradlew.bat assembleDebug
+```
+The generated APK will be located at `android/app/build/outputs/apk/debug/app-debug.apk`.
+npm run build

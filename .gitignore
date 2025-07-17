@@ -4,7 +4,6 @@
 *.apk
 *.aar
 *.ap_
-*.aab
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -23,6 +22,9 @@ out/
 .gradle/
 build/
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Local configuration file (sdk path, etc)
 local.properties
