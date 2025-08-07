@@ -1,52 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButtons, IonModal, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonDatetime } from '@ionic/react';
 import Header from '../components/Header';
 import { add, menu, chevronBack, chevronForward, trash, pencil } from 'ionicons/icons';
 import MaterialTable, { Action, Column } from 'material-table';
-import { forwardRef } from 'react';
 import { getSavingsData, updateSavingsData, deleteSavingsData } from '../services/SavingsService';
 import { SavingsData } from '../services/SavingsService';
 import { SAVING_TYPES } from '../constants/savingTypes';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import { AccountBalance, Security, ShowChart, Savings, MonetizationOn, TrendingUp, AttachMoney, PieChart } from '@mui/icons-material';
 
 interface SavingsDashboardProps {
     onCreateNew: () => void;
     toggleNav: () => void;
 }
 
-const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggleNav }) => {
-    const [savings, setSavings] = useState<SavingsData[]>([]);
-    const [selectedSavings, setSelectedSavings] = useState<SavingsData | null>(null);
-    const [isEditing, setIsEditing] = useState(false);
-    const [savingsByType, setSavingsByType] = useState<Record<string, { amount: number, maturity: number }>>({});
-    const [currentTypeIndex, setCurrentTypeIndex] = useState(0);
+const iconMapping: Record<string, JSX.Element> = {
+    FD: <AccountBalance style={{ fontSize: 40, color: '#3e98c7' }} />,
+    Insurance: <Security style={{ fontSize: 40, color: '#f44336' }} />,
+    MF: <ShowChart style={{ fontSize: 40, color: '#4caf50' }} />,
+    PPF: <Savings style={{ fontSize: 40, color: '#ff9800' }} />,
+    CASH: <AttachMoney style={{ fontSize: 40, color: '#9c27b0' }} />,
+    NPS: <TrendingUp style={{ fontSize: 40, color: '#2196f3' }} />,
+    PF: <MonetizationOn style={{ fontSize: 40, color: '#009688' }} />,
+    Others: <PieChart style={{ fontSize: 40, color: '#607d8b' }} />,
+    ALL: <PieChart style={{ fontSize: 40, color: '#000000' }} />
+};
 
-    useEffect(() => {
+const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggleNav }) => {
+    const [savings, setSavings] = React.useState<SavingsData[]>([]);
+    const [selectedSavings, setSelectedSavings] = React.useState<SavingsData | null>(null);
+    const [isEditing, setIsEditing] = React.useState(false);
+    const [savingsByType, setSavingsByType] = React.useState<Record<string, { amount: number, maturity: number }>>({});
+    const [currentTypeIndex, setCurrentTypeIndex] = React.useState(0);
+
+    React.useEffect(() => {
         const fetchData = async () => {
             const data = await getSavingsData();
             setSavings(data);
-            
-            // Initialize with all types including ALL
+
             const initialTotals = SAVING_TYPES.reduce<Record<string, { amount: number, maturity: number }>>((acc, type) => {
                 acc[type] = { amount: 0, maturity: 0 };
                 return acc;
             }, {});
-            
-            // Calculate totals by type
+
             const byType = data.reduce((acc, item) => {
                 const type = item.savingType || 'Others';
                 acc[type].amount += item.amount || 0;
                 acc[type].maturity += item.maturityAmount || 0;
                 return acc;
             }, initialTotals);
-            
-            // Calculate ALL totals
+
             const allTotals = Object.values(byType).reduce<{ amount: number, maturity: number }>((acc, totals) => {
                 acc.amount += totals.amount;
                 acc.maturity += totals.maturity;
                 return acc;
             }, { amount: 0, maturity: 0 });
-            
-            // Create ordered object with ALL first
+
             const orderedTotals = { ALL: allTotals, ...byType };
             setSavingsByType(orderedTotals);
         };
@@ -56,31 +66,31 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
     const columns: Column<SavingsData>[] = [
         { title: 'Type', field: 'savingType', type: 'string', cellStyle: { textAlign: 'left', fontSize: '0.8rem' }, headerStyle: { textAlign: 'left', fontSize: '0.8rem' } },
         { title: 'Amount', field: 'amount', type: 'numeric', cellStyle: { textAlign: 'left', fontSize: '0.8rem' }, headerStyle: { textAlign: 'left', fontSize: '0.8rem' } },
-        { 
-            title: 'Interest', 
+        {
+            title: 'Interest',
             field: 'interest',
             type: 'numeric',
             render: rowData => (rowData.maturityAmount - rowData.amount).toLocaleString(),
             cellStyle: { textAlign: 'left', fontSize: '0.8rem' },
             headerStyle: { fontSize: '0.8rem' }
         },
-{ 
-    title: 'End Date', 
-    field: 'endDate', 
-    type: 'string',
-    render: rowData => {
-        const endDate = Array.isArray(rowData.endDate) ? rowData.endDate[0] : rowData.endDate;
-        return new Date(endDate).toLocaleDateString(); // Format to display only the date
-    },
-    cellStyle: { textAlign: 'left', fontSize: '0.8rem' },
-    headerStyle: { fontSize: '0.8rem' }
-}
+        {
+            title: 'End Date',
+            field: 'endDate',
+            type: 'string',
+            render: rowData => {
+                const endDate = Array.isArray(rowData.endDate) ? rowData.endDate[0] : rowData.endDate;
+                return new Date(endDate).toLocaleDateString();
+            },
+            cellStyle: { textAlign: 'left', fontSize: '0.8rem' },
+            headerStyle: { fontSize: '0.8rem' }
+        }
     ];
 
     const detailPanel = (rowData: SavingsData) => {
         const startDate = Array.isArray(rowData.startDate) ? rowData.startDate[0] : rowData.startDate;
         const endDate = Array.isArray(rowData.endDate) ? rowData.endDate[0] : rowData.endDate;
-        
+
         return (
             <div style={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
                 <h4 style={{ margin: '0 0 8px 0' }}>{rowData.savingName}</h4>
@@ -104,15 +114,63 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
         // Handle rows per page change
     };
 
+    // New component for live dashboard below the table
+    const SavingsTypeDashboard: React.FC<{ data: Record<string, { amount: number, maturity: number }> }> = ({ data }) => {
+        return (
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                gap: '16px',
+                padding: '20px',
+                maxWidth: '900px',
+                margin: '0 auto'
+            }}>
+                {Object.entries(data).map(([type, totals]) => {
+                    const percentage = totals.maturity > 0 ? Math.min(100, (totals.amount / totals.maturity) * 100) : 0;
+                    return (
+                        <div key={type} style={{
+                            border: '1px solid #ccc',
+                            borderRadius: '12px',
+                            padding: '12px',
+                            textAlign: 'center',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                            backgroundColor: '#fff'
+                        }}>
+                            <div style={{ marginBottom: '8px' }}>
+                                {iconMapping[type] || iconMapping['Others']}
+                            </div>
+                            <div style={{ width: 80, height: 80, margin: '0 auto' }}>
+                                <CircularProgressbar
+                                    value={percentage}
+                                    text={`${Math.round(percentage)}%`}
+                                    styles={buildStyles({
+                                        textSize: '16px',
+                                        pathColor: '#3e98c7',
+                                        textColor: '#333',
+                                        trailColor: '#d6d6d6',
+                                    })}
+                                />
+                            </div>
+                            <h4 style={{ margin: '8px 0 4px 0' }}>{type}</h4>
+                            <div style={{ fontSize: '0.9rem', color: '#555' }}>
+                                ₹{totals.amount.toLocaleString()} / ₹{totals.maturity.toLocaleString()}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar style={{ backgroundColor: 'blue' }}>
                     <IonButtons slot="start">
                         <IonButton onClick={toggleNav}>
-                        <IonIcon icon={menu} />
-                            </IonButton>
-                        </IonButtons>       
+                            <IonIcon icon={menu} />
+                        </IonButton>
+                    </IonButtons>       
                     <IonTitle>Savings Dashboard</IonTitle>
                     <IonButton 
                         slot="end" 
@@ -190,13 +248,16 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                         onChangeRowsPerPage={handleRowsPerPageChange}
                         actions={[]}
                         onRowClick={(event, rowData, togglePanel) => {
-                            // Toggle the detail panel when clicking on any row
                             if (togglePanel) {
                                 togglePanel();
                             }
                         }}
                     />
                 </div>
+
+                {/* New live dashboard below the table */}
+                <SavingsTypeDashboard data={savingsByType} />
+
             </IonContent>
 
             <IonModal isOpen={isEditing} onDidDismiss={() => setIsEditing(false)}>
