@@ -77,6 +77,25 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
 }
     ];
 
+    const detailPanel = (rowData: SavingsData) => {
+        const startDate = Array.isArray(rowData.startDate) ? rowData.startDate[0] : rowData.startDate;
+        const endDate = Array.isArray(rowData.endDate) ? rowData.endDate[0] : rowData.endDate;
+        
+        return (
+            <div style={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
+                <h4 style={{ margin: '0 0 8px 0' }}>{rowData.savingName}</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                    <div><strong>Type:</strong> {rowData.savingType}</div>
+                    <div><strong>Amount:</strong> ₹{rowData.amount.toLocaleString()}</div>
+                    <div><strong>Maturity Amount:</strong> ₹{rowData.maturityAmount.toLocaleString()}</div>
+                    <div><strong>Interest:</strong> ₹{(rowData.maturityAmount - rowData.amount).toLocaleString()}</div>
+                    <div><strong>Start Date:</strong> {new Date(startDate).toLocaleDateString()}</div>
+                    <div><strong>End Date:</strong> {new Date(endDate).toLocaleDateString()}</div>
+                </div>
+            </div>
+        );
+    };
+
     const handlePageChange = (page: number) => {
         // Handle page change
     };
@@ -150,8 +169,8 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                         style={{ maxWidth: '50rem' }} // Set the desired width here
                         options={{
                             search: false,
-                            paging: true,                            
-                            exportButton: true, 
+                            paging: false,                            
+                            exportButton: false, 
                             defaultExpanded: false,
                             actionsColumnIndex: -1,
                             sorting: false
@@ -164,38 +183,8 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                             ))
                         }}
                         onChangePage={handlePageChange}
-                        onChangeRowsPerPage={handleRowsPerPageChange}                                       
-                        actions={[ 
-                        { 
-                            icon: () => <IonIcon icon={pencil} />, 
-                            tooltip: 'Edit Savings', 
-                            onClick: async (event, rowData) => { 
-                                if (Array.isArray(rowData)) return; 
-                                setSelectedSavings(rowData); 
-                                setIsEditing(true); 
-                            } 
-                        }, 
-                        { 
-                            icon: () => <IonIcon icon={trash} />, 
-                            tooltip: 'Delete Savings', 
-                            onClick: async (event, rowData) => { 
-                                if (Array.isArray(rowData)) return; 
-                                const confirmDelete = window.confirm('Are you sure you want to delete this savings entry?'); 
-                                if (confirmDelete) { 
-                                    try { 
-                                        const index = savings.findIndex(s => s === rowData); 
-                                        await deleteSavingsData(index); 
-                                        // Create a new array to force state update 
-                                        const newSavings = [...savings]; 
-                                        newSavings.splice(index, 1); 
-                                        setSavings(newSavings); 
-                                    } catch (error) { 
-                                        console.error('Error deleting savings:', error); 
-                                    } 
-                                } 
-                            } 
-                        } 
-                    ]}
+                        onChangeRowsPerPage={handleRowsPerPageChange}
+                        actions={[]}
                     />
                 </div>
             </IonContent>
