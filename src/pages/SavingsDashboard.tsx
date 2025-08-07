@@ -163,9 +163,10 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
 
                 <div style={{ padding: '18px' }}>                   
                     <MaterialTable
-                        title="Savings Details"
+                        title=""
                         columns={columns}
                         data={savings}
+                        detailPanel={detailPanel}
                         style={{ maxWidth: '50rem' }} // Set the desired width here
                         options={{
                             search: false,
