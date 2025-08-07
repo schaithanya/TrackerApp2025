@@ -167,7 +167,7 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                         columns={columns}
                         data={savings}
                         detailPanel={detailPanel}
-                        style={{ maxWidth: '50rem' }} // Set the desired width here
+                        style={{ maxWidth: '50rem' }}
                         options={{
                             search: false,
                             paging: false,                            
@@ -181,11 +181,20 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                                 <svg {...props} ref={ref} viewBox="0 0 24 24" width="24" height="24">
                                     <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
                                 </svg>
+                            )),
+                            DetailPanel: forwardRef<SVGSVGElement>((props, ref) => (
+                                <svg {...props} ref={ref} style={{ display: 'none' }} />
                             ))
                         }}
                         onChangePage={handlePageChange}
                         onChangeRowsPerPage={handleRowsPerPageChange}
                         actions={[]}
+                        onRowClick={(event, rowData, togglePanel) => {
+                            // Toggle the detail panel when clicking on any row
+                            if (togglePanel) {
+                                togglePanel();
+                            }
+                        }}
                     />
                 </div>
             </IonContent>
