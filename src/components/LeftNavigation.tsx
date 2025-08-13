@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonContent, IonList, IonItem, IonLabel, IonIcon, IonRouterLink } from '@ionic/react';
+import { IonContent, IonList, IonItem, IonLabel, IonIcon } from '@ionic/react';
 import { 
   walletOutline, 
   documentTextOutline, 
@@ -10,12 +10,9 @@ import {
   calculatorOutline,
   flagOutline
 } from 'ionicons/icons';
-import { useHistory } from 'react-router-dom';
 import './LeftNavigation.css';
 
 const LeftNavigation: React.FC<{ isOpen: boolean; toggleNav: () => void }> = ({ isOpen, toggleNav }) => {
-    const history = useHistory();
-
     const pages = [
         { name: 'Savings', path: '/savings' },
         { name: 'Documents', path: '/documents' },
@@ -28,9 +25,7 @@ const LeftNavigation: React.FC<{ isOpen: boolean; toggleNav: () => void }> = ({ 
     ];
 
     const handleNavClick = (path: string) => {
-        // Using a direct navigation for now to ensure it works
-        window.location.href = path;
-        toggleNav();
+        window.location.pathname = path       
     };
 
     return (
@@ -47,9 +42,7 @@ const LeftNavigation: React.FC<{ isOpen: boolean; toggleNav: () => void }> = ({ 
                             <IonItem 
                                 button 
                                 key={page.name} 
-                                routerLink={page.path}
-                                routerDirection="root"
-                                onClick={() => toggleNav()}
+                                onClick={() => handleNavClick(page.path)}
                                 className="nav-item"
                             >
                                 <IonIcon 
