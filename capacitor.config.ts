@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.demo.pg.react',
-  appName: 'React Photo Gallery',
+  appId: 'com.trackerapp2025.app',
+  appName: 'Tracker App',
   webDir: 'dist',
   server: {
     androidScheme: 'https'
