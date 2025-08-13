@@ -1,7 +1,7 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButtons, IonModal, IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonDatetime } from '@ionic/react';
 import Header from '../components/Header';
-import { add, menu, chevronBack, chevronForward, trash, pencil } from 'ionicons/icons';
+import { add, menu, chevronBack, chevronForward, trash, pencil, gridOutline, barChartOutline } from 'ionicons/icons';
 import MaterialTable, { Action, Column } from 'material-table';
 import { getSavingsData, updateSavingsData, deleteSavingsData } from '../services/SavingsService';
 import { SavingsData } from '../services/SavingsService';
@@ -9,6 +9,8 @@ import { SAVING_TYPES } from '../constants/savingTypes';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { AccountBalance, Security, ShowChart, Savings, MonetizationOn, TrendingUp, AttachMoney, PieChart } from '@mui/icons-material';
+import DashboardStats from '../components/DashboardStats';
+import '../components/DashboardStats.css';
 
 interface SavingsDashboardProps {
     onCreateNew: () => void;
@@ -33,6 +35,7 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
     const [isEditing, setIsEditing] = React.useState(false);
     const [savingsByType, setSavingsByType] = React.useState<Record<string, { amount: number, maturity: number }>>({});
     const [currentTypeIndex, setCurrentTypeIndex] = React.useState(0);
+    const [viewMode, setViewMode] = React.useState<'graph' | 'data'>('graph');
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -114,53 +117,7 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
         // Handle rows per page change
     };
 
-    // New component for live dashboard below the table
-    const SavingsTypeDashboard: React.FC<{ data: Record<string, { amount: number, maturity: number }> }> = ({ data }) => {
-        return (
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-                gap: '16px',
-                padding: '20px',
-                maxWidth: '900px',
-                margin: '0 auto'
-            }}>
-                {Object.entries(data).map(([type, totals]) => {
-                    const percentage = totals.maturity > 0 ? Math.min(100, (totals.amount / totals.maturity) * 100) : 0;
-                    return (
-                        <div key={type} style={{
-                            border: '1px solid #ccc',
-                            borderRadius: '12px',
-                            padding: '12px',
-                            textAlign: 'center',
-                            boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-                            backgroundColor: '#fff'
-                        }}>
-                            <div style={{ marginBottom: '8px' }}>
-                                {iconMapping[type] || iconMapping['Others']}
-                            </div>
-                            <div style={{ width: 80, height: 80, margin: '0 auto' }}>
-                                <CircularProgressbar
-                                    value={percentage}
-                                    text={`${Math.round(percentage)}%`}
-                                    styles={buildStyles({
-                                        textSize: '16px',
-                                        pathColor: '#3e98c7',
-                                        textColor: '#333',
-                                        trailColor: '#d6d6d6',
-                                    })}
-                                />
-                            </div>
-                            <h4 style={{ margin: '8px 0 4px 0' }}>{type}</h4>
-                            <div style={{ fontSize: '0.9rem', color: '#555' }}>
-                                ₹{totals.amount.toLocaleString()} / ₹{totals.maturity.toLocaleString()}
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-        );
-    };
+    // Component for showing savings totals by type
 
     return (
         <IonPage>
@@ -172,12 +129,18 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                         </IonButton>
                     </IonButtons>       
                     <IonTitle>Savings Dashboard</IonTitle>
-                    <IonButton 
-                        slot="end" 
-                        onClick={onCreateNew}
-                        style={{ marginRight: '10px' }}>
-                        <IonIcon icon={add} size="small" />
-                    </IonButton>
+                    <IonButtons slot="end">
+                        <IonButton 
+                            onClick={() => setViewMode(viewMode === 'graph' ? 'data' : 'graph')}
+                            style={{ marginRight: '8px' }}>
+                            <IonIcon icon={viewMode === 'graph' ? gridOutline : barChartOutline} />
+                        </IonButton>
+                        <IonButton 
+                            onClick={onCreateNew}
+                            style={{ marginRight: '10px' }}>
+                            <IonIcon icon={add} size="small" />
+                        </IonButton>
+                    </IonButtons>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
@@ -219,44 +182,45 @@ const SavingsDashboard: React.FC<SavingsDashboardProps> = ({ onCreateNew, toggle
                     </IonButton>
                 </div>
 
-                <div style={{ padding: '18px' }}>                   
-                    <MaterialTable
-                        title=""
-                        columns={columns}
-                        data={savings}
-                        detailPanel={detailPanel}
-                        style={{ maxWidth: '50rem' }}
-                        options={{
-                            search: false,
-                            paging: false,                            
-                            exportButton: false, 
-                            defaultExpanded: false,
-                            actionsColumnIndex: -1,
-                            sorting: false
-                        }}
-                        icons={{
-                            Export: forwardRef<SVGSVGElement>((props, ref) => (
-                                <svg {...props} ref={ref} viewBox="0 0 24 24" width="24" height="24">
-                                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                                </svg>
-                            )),
-                            DetailPanel: forwardRef<SVGSVGElement>((props, ref) => (
-                                <svg {...props} ref={ref} style={{ display: 'none' }} />
-                            ))
-                        }}
-                        onChangePage={handlePageChange}
-                        onChangeRowsPerPage={handleRowsPerPageChange}
-                        actions={[]}
-                        onRowClick={(event, rowData, togglePanel) => {
-                            if (togglePanel) {
-                                togglePanel();
-                            }
-                        }}
-                    />
-                </div>
-
-                {/* New live dashboard below the table */}
-                <SavingsTypeDashboard data={savingsByType} />
+                {viewMode === 'graph' ? (
+                    <DashboardStats savings={savings} savingsByType={savingsByType} />
+                ) : (
+                    <div style={{ padding: '18px' }}>                   
+                        <MaterialTable
+                            title=""
+                            columns={columns}
+                            data={savings}
+                            detailPanel={detailPanel}
+                            style={{ maxWidth: '50rem' }}
+                            options={{
+                                search: false,
+                                paging: false,                            
+                                exportButton: false, 
+                                defaultExpanded: false,
+                                actionsColumnIndex: -1,
+                                sorting: false
+                            }}
+                            icons={{
+                                Export: forwardRef<SVGSVGElement>((props, ref) => (
+                                    <svg {...props} ref={ref} viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                                    </svg>
+                                )),
+                                DetailPanel: forwardRef<SVGSVGElement>((props, ref) => (
+                                    <svg {...props} ref={ref} style={{ display: 'none' }} />
+                                ))
+                            }}
+                            onChangePage={handlePageChange}
+                            onChangeRowsPerPage={handleRowsPerPageChange}
+                            actions={[]}
+                            onRowClick={(event, rowData, togglePanel) => {
+                                if (togglePanel) {
+                                    togglePanel();
+                                }
+                            }}
+                        />
+                    </div>
+                )}
 
             </IonContent>
 

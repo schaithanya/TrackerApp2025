@@ -1,0 +1,214 @@
+/* Custom color variables */
+:root {
+  --app-purple: #6B5ECD;
+  --app-light-purple: #8B81D9;
+  --app-orange: #FF6B6B;
+  --app-green: #4CD964;
+  --app-blue: #5AC8FA;
+  --app-background: #F5F6FA;
+  --app-text-primary: #2D3142;
+  --app-text-secondary: #9BA3B9;
+}
+
+/* Typography */
+body {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+/* App Header */
+ion-header {
+  box-shadow: none;
+}
+
+ion-toolbar {
+  --background: transparent;
+  --border-width: 0 !important;
+}
+
+ion-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--app-text-primary);
+}
+
+/* Content Area */
+ion-content {
+  --background: var(--app-background);
+}
+
+/* Card Styles */
+ion-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin: 8px;
+}
+
+.savings-card {
+  padding: 16px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  margin-bottom: 12px;
+}
+
+.savings-card__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.savings-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.savings-card__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--app-text-primary);
+  margin: 0;
+}
+
+.savings-card__amount {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--app-text-primary);
+  margin: 8px 0;
+}
+
+/* Progress Indicators */
+.circular-progress {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: conic-gradient(var(--app-purple) var(--progress), #E8E9ED 0deg);
+}
+
+.progress-label {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--app-purple);
+}
+
+/* List Items */
+ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --background: #FFFFFF;
+  --border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+/* Buttons */
+ion-button {
+  --border-radius: 12px;
+  --box-shadow: none;
+  font-weight: 600;
+  text-transform: none;
+  height: 48px;
+}
+
+.button-primary {
+  --background: var(--app-purple);
+  --color: #FFFFFF;
+}
+
+.button-secondary {
+  --background: var(--app-background);
+  --color: var(--app-purple);
+}
+
+/* Status Indicators */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.high {
+  background: rgba(76, 217, 100, 0.1);
+  color: var(--app-green);
+}
+
+.status-badge.medium {
+  background: rgba(90, 200, 250, 0.1);
+  color: var(--app-blue);
+}
+
+.status-badge.low {
+  background: rgba(255, 107, 107, 0.1);
+  color: var(--app-orange);
+}
+
+/* Icons */
+.custom-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-background {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-background.purple {
+  background: rgba(107, 94, 205, 0.1);
+  color: var(--app-purple);
+}
+
+.icon-background.orange {
+  background: rgba(255, 107, 107, 0.1);
+  color: var(--app-orange);
+}
+
+.icon-background.green {
+  background: rgba(76, 217, 100, 0.1);
+  color: var(--app-green);
+}
+
+/* Grid Layout */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+/* Stats Card */
+.stats-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.stats-card__value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--app-text-primary);
+  margin: 8px 0;
+}
+
+.stats-card__label {
+  font-size: 14px;
+  color: var(--app-text-secondary);
+  margin: 0;
+}
+
+/* Custom Padding */
+.ion-padding-custom {
+  padding: 20px;
+}

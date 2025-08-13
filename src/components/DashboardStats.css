@@ -1,0 +1,180 @@
+.dashboard-stats {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.stats-card {
+    background: #FFFFFF;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+    overflow: hidden;
+}
+
+.stats-card ion-card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.stats-card ion-card-title {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: #2D3142;
+}
+
+.stats-card ion-card-content {
+    padding: 20px !important;
+}
+
+/* Overall Progress Card */
+.overall-progress .progress-container {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.overall-progress .CircularProgressbar {
+    width: 120px;
+    margin-right: 24px;
+}
+
+.progress-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #F8F9FB;
+    border-radius: 12px;
+}
+
+.stat-item .label {
+    color: #6B7280;
+    font-size: 14px;
+}
+
+.stat-item .value {
+    color: #2D3142;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Distribution Bars */
+.distribution-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.distribution-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.bar-header .type {
+    color: #2D3142;
+    font-weight: 500;
+}
+
+.bar-header .percentage {
+    color: #6B7280;
+}
+
+.bar-container {
+    height: 8px;
+    background: #F3F4F6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+/* Stats Row */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+/* ROI Card */
+.roi-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.stat-large {
+    font-size: 36px;
+    font-weight: 700;
+    color: #6B5ECD;
+}
+
+.stat-detail {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #6B7280;
+}
+
+/* Maturity List */
+.maturity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.maturity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #F8F9FB;
+    border-radius: 12px;
+}
+
+.maturity-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.maturity-info .name {
+    font-weight: 500;
+    color: #2D3142;
+}
+
+.maturity-info .date {
+    font-size: 12px;
+    color: #6B7280;
+}
+
+.maturity-item .amount {
+    font-weight: 600;
+    color: #2D3142;
+}
+
+.no-maturities {
+    text-align: center;
+    color: #6B7280;
+    padding: 24px 0;
+}

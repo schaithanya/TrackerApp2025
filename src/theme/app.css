@@ -1,0 +1,174 @@
+/* App Global Styles */
+:root {
+  /* Colors from Trezo UI Kit */
+  --ion-color-primary: #6B5ECD;
+  --ion-color-primary-rgb: 107, 94, 205;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #5e53b4;
+  --ion-color-primary-tint: #7a6ed2;
+
+  --ion-color-secondary: #FF9500;
+  --ion-color-secondary-rgb: 255, 149, 0;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade: #e08300;
+  --ion-color-secondary-tint: #ffa01a;
+
+  --ion-background-color: #F8F9FB;
+  --ion-background-color-rgb: 248, 249, 251;
+  --ion-text-color: #1A1A1A;
+  --ion-text-color-rgb: 26, 26, 26;
+
+  --ion-border-color: #E5E7EB;
+}
+
+/* App Container */
+ion-app {
+  font-family: -apple-system, 'SF Pro Display', BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Header Styles */
+ion-header {
+  background: transparent;
+}
+
+ion-header::after {
+  display: none;
+}
+
+ion-toolbar {
+  --background: transparent;
+  --border-width: 0 !important;
+  padding: 16px;
+}
+
+ion-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ion-text-color);
+}
+
+/* Content Styles */
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+/* Card Styles */
+ion-card {
+  border-radius: 16px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05) !important;
+  margin: 16px;
+}
+
+ion-card-header {
+  padding: 20px;
+}
+
+ion-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ion-text-color);
+}
+
+/* List Styles */
+ion-list {
+  background: transparent;
+}
+
+ion-item {
+  --background: #FFFFFF;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+/* Button Styles */
+ion-button {
+  --border-radius: 12px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+/* Form Styles */
+ion-input, ion-textarea, ion-select {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --border-radius: 12px;
+  --background: #FFFFFF;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+/* Tab Bar Styles */
+ion-tab-bar {
+  --background: #FFFFFF;
+  --border: none;
+  padding: 12px;
+  box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.05);
+}
+
+ion-tab-button {
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --color: #666666;
+  --color-selected: var(--ion-color-primary);
+}
+
+ion-tab-button::before {
+  background-color: transparent;
+}
+
+/* Progress Bar */
+ion-progress-bar {
+  --background: #E5E7EB;
+  --progress-background: var(--ion-color-primary);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Badge Styles */
+ion-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* Modal Styles */
+ion-modal {
+  --height: auto;
+  --border-radius: 20px 20px 0 0;
+}
+
+.modal-header {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Segment Controls */
+ion-segment {
+  --background: #F8F9FB;
+  border-radius: 12px;
+  padding: 4px;
+}
+
+ion-segment-button {
+  --background-checked: #FFFFFF;
+  --color-checked: var(--ion-color-primary);
+  --indicator-color: transparent;
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 500;
+}
