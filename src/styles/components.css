@@ -1,0 +1,265 @@
+/* Component-specific Styles for Personal Tracker App */
+
+/* Header Styles */
+.app-header {
+  background: var(--ion-color-primary);
+  color: white;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Navigation Styles */
+.nav-container {
+  background: var(--ion-color-light);
+  border-right: 1px solid var(--ion-color-medium);
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: var(--ion-color-dark);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: var(--ion-color-light);
+}
+
+.nav-item.active {
+  background-color: var(--ion-color-primary);
+  color: white;
+}
+
+.nav-item ion-icon {
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+/* Dashboard Styles */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.dashboard-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h3 {
+  margin: 0 0 12px 0;
+  color: var(--ion-color-dark);
+  font-size: 18px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--ion-color-primary);
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+ 
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--ion-color-medium);
+}
+
+.table th {
+  background-color: var(--ion-color-light);
+  font-weight: 600;
+}
+
+.table tr:hover {
+  background-color: var(--ion-color-light);
+}
+
+/* Form Styles */
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.form-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--ion-color-dark);
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 768px) {
+  .nav-container {
+    width: 200px;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .dashboard-card {
+    padding: 16px;
+  }
+  
+  .stat-value {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    width: 100%;
+    position: relative;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--ion-color-medium);
+  }
+  
+  .app-header {
+    padding: 12px;
+  }
+  
+  .app-header h1 {
+    font-size: 18px;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .dashboard-card {
+    padding: 12px;
+  }
+  
+  .stat-value {
+    font-size: 18px;
+  }
+  
+  .table-container {
+    border-radius: 4px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 8px;
+    font-size: 14px;
+  }
+  
+  .form-container {
+    padding: 12px;
+  }
+  
+  .form-section {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 375px) {
+  .app-header {
+    padding: 8px;
+  }
+  
+  .app-header h1 {
+    font-size: 16px;
+  }
+  
+  .dashboard-card {
+    padding: 8px;
+  }
+  
+  .stat-value {
+    font-size: 16px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .nav-item,
+  .btn,
+  .table tr {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-item {
+    padding: 12px 16px;
+  }
+  
+  .btn {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+}
+
+/* Safe area support for modern mobile devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .nav-container,
+  .nav-responsive {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* High DPI screen optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .card,
+  .dashboard-card,
+  .form-section {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+}
