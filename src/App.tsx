@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useHistory } from 'react-router-dom';
 import LeftNavigation from './components/LeftNavigation'; // Import the LeftNavigation component
 import {
   IonApp,
@@ -41,11 +41,10 @@ setupIonicReact();
 
 const App: React.FC = () => {
     const [isNavOpen, setIsNavOpen] = useState(false); // State to manage navigation visibility
+    const history = useHistory();
 
     const toggleNav = () => {
-        console.log("Toggle function called. Current state:", isNavOpen); // Debugging line
-        setIsNavOpen(!isNavOpen); // Update state once
-        console.log("New state after toggle:", !isNavOpen); // Log new state
+        setIsNavOpen(!isNavOpen);
     };
 
     return (
@@ -56,9 +55,7 @@ const App: React.FC = () => {
                     <Route exact path="/savings">
                         <SavingsDashboard 
                             toggleNav={toggleNav} 
-                            onCreateNew={() => {
-                                window.location.pathname = '/savings/create';
-                            }}
+                            onCreateNew={() => history.push('/savings/create')}
                         />
                     </Route>
                     <Route exact path="/savings/create">
