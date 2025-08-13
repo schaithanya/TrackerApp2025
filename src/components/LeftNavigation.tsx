@@ -7,7 +7,8 @@ import {
   cashOutline, 
   bookOutline, 
   calendarOutline, 
-  calculatorOutline 
+  calculatorOutline,
+  flagOutline
 } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import './LeftNavigation.css';
@@ -23,10 +24,12 @@ const LeftNavigation: React.FC<{ isOpen: boolean; toggleNav: () => void }> = ({ 
         { name: 'MyStory', path: '/mystory' },
         { name: 'Scheduler', path: '/scheduler' },
         { name: 'Budget Planner', path: '/budget-planner' },
+        { name: 'Goal Tracker', path: '/goals' },
     ];
 
     const handleNavClick = (path: string) => {
-        window.location.pathname = path       
+        history.push(path);
+        toggleNav();
     };
 
     return (
@@ -54,6 +57,7 @@ const LeftNavigation: React.FC<{ isOpen: boolean; toggleNav: () => void }> = ({ 
                                         page.name === 'Expense' ? cashOutline :
                                         page.name === 'MyStory' ? bookOutline :
                                         page.name === 'Scheduler' ? calendarOutline :
+                                        page.name === 'Goal Tracker' ? flagOutline :
                                         calculatorOutline
                                     }
                                 />

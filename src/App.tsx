@@ -15,6 +15,7 @@ import Expense from './pages/Expense';
 import MyStory from './pages/MyStory';
 import Scheduler from './pages/Scheduler';
 import BudgetPlanner from './pages/BudgetPlanner';
+import GoalTracker from './pages/GoalTracker';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -80,6 +81,9 @@ const App: React.FC = () => {
                     </Route>
                     <Route exact path="/budget-planner">
                         <BudgetPlanner toggleNav={toggleNav} />
+                    </Route>
+                    <Route exact path="/goals">
+                        <GoalTracker toggleNav={toggleNav} />
                     </Route>
                     <Route exact path="/">
                         <Redirect to="/savings" />
