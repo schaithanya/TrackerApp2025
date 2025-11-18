@@ -1,0 +1,11 @@
+.analyze-button {
+    --border-radius: 12px;
+    --box-shadow: 0 4px 12px rgba(var(--ion-color-tertiary-rgb), 0.2);
+    margin: 16px 0;
+    font-weight: 600;
+}
+
+.analyze-button ion-icon {
+    margin-right: 8px;
+    font-size: 20px;
+}

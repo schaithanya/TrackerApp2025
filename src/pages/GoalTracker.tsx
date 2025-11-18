@@ -20,9 +20,11 @@ import {
     IonSelectOption,
     IonSegment,
     IonSegmentButton,
-    IonList
+    IonList,
+    useIonToast
 } from '@ionic/react';
-import { menu, pencil } from 'ionicons/icons';
+import { menu, pencil, analyticsOutline } from 'ionicons/icons';
+import './GoalTracker.css';
 import { Line } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -43,6 +45,8 @@ import {
     saveFireGoalData,
     calculateRetirementProjections
 } from '../services/GoalService';
+import { getGoalAdvice, ChatGPTResponse } from '../services/GoalTrackerService';
+import GoalAdviceModal from '../components/GoalAdviceModal';
 
 ChartJS.register(
     CategoryScale,
@@ -64,6 +68,10 @@ const GoalTracker: React.FC<GoalTrackerProps> = ({ toggleNav }) => {
     const [activeTab, setActiveTab] = useState<'income' | 'expenses'>('income');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [showAdviceModal, setShowAdviceModal] = useState(false);
+    const [goalAdvice, setGoalAdvice] = useState<ChatGPTResponse | null>(null);
+    const [loadingAdvice, setLoadingAdvice] = useState(false);
+    const [presentToast] = useIonToast();
 
     useEffect(() => {
         const loadData = async () => {
@@ -243,6 +251,46 @@ const GoalTracker: React.FC<GoalTrackerProps> = ({ toggleNav }) => {
                                         <p>{((fireData.currentMonthlySavings / monthlyIncome) * 100).toFixed(1)}%</p>
                                     </div>
                                 </div>
+                                <IonButton
+                                    expand="block"
+                                    color="tertiary"
+                                    className="analyze-button ion-margin-top"
+                                    onClick={async () => {
+                                        try {
+                                            setLoadingAdvice(true);
+                                            setShowAdviceModal(true);
+                                            const advice = await getGoalAdvice({
+                                                savingName: 'FIRE Goal',
+                                                savingType: 'Others', // Using 'Others' for FIRE goals
+                                                amount: fireData.currentNetWorth,
+                                                maturityAmount: fireData.targetRetirementAmount,
+                                                startDate: new Date().toISOString(),
+                                                endDate: new Date(new Date().setFullYear(new Date().getFullYear() + yearsToRetirement)).toISOString(),
+                                                comments: `Monthly Income: $${2}
+Current Age: ${35}
+Target Retirement Age: ${60}
+Monthly Expenses: $${43333}
+Essential Expenses: $${34343}
+Expected Return Rate: ${6}%
+Safe Withdrawal Rate: ${7}%`,
+                                                file: null
+                                            });
+                                            setGoalAdvice(advice);
+                                        } catch (error) {
+                                            console.error('Error getting goal advice:', error);
+                                            presentToast({
+                                                message: 'Failed to get goal analysis. Please try again.',
+                                                duration: 3000,
+                                                color: 'danger'
+                                            });
+                                        } finally {
+                                            setLoadingAdvice(false);
+                                        }
+                                    }}
+                                >
+                                    <IonIcon slot="start" icon={analyticsOutline} />
+                                    Get AI Analysis
+                                </IonButton>
                             </div>
                         </IonCardContent>
                     </IonCard>
@@ -511,8 +559,61 @@ const GoalTracker: React.FC<GoalTrackerProps> = ({ toggleNav }) => {
                     >
                         Save Changes
                     </IonButton>
+
+                    <IonButton
+                        expand="block"
+                        className="ion-margin"
+                        color="secondary"
+                        onClick={async () => {
+                            try {
+                                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer ' + import.meta.env.VITE_OPENAI_API_KEY
+                                    },
+                                    body: JSON.stringify({
+                                        model: "gpt-4-1106~",
+                                        messages: [{
+                                            role: "user",
+                                            content: "Say hello!"
+                                        }],
+                                        temperature: 0.7,
+                                        max_tokens: 100
+                                    })
+                                });
+
+                                if (!response.ok) {
+                                    throw new Error('API request failed');
+                                }
+
+                                const data = await response.json();
+                                presentToast({
+                                    message: 'API Test Successful: ' + data.choices[0].message.content,
+                                    duration: 5000,
+                                    color: 'success'
+                                });
+                            } catch (error) {
+                                console.error('API Test Error:', error);
+                                presentToast({
+                                    message: 'API Test Failed: ' + (error as Error).message,
+                                    duration: 5000,
+                                    color: 'danger'
+                                });
+                            }
+                        }}
+                    >
+                        Test API Key
+                    </IonButton>
                 </IonContent>
             </IonModal>
+
+            <GoalAdviceModal
+                isOpen={showAdviceModal}
+                onClose={() => setShowAdviceModal(false)}
+                advice={goalAdvice}
+                loading={loadingAdvice}
+            />
         </IonPage>
     );
 };

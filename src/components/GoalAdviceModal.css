@@ -1,0 +1,76 @@
+.goal-advice-modal {
+    --ion-background-color: #f4f5f8;
+}
+
+.goal-advice-modal ion-card {
+    margin: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.goal-advice-modal ion-card-header {
+    background: var(--ion-color-primary-tint);
+    border-radius: 12px 12px 0 0;
+}
+
+.goal-advice-modal ion-card-title {
+    color: var(--ion-color-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.goal-advice-modal ion-badge {
+    padding: 8px 16px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+}
+
+.goal-advice-modal ion-badge ion-icon {
+    vertical-align: middle;
+}
+
+.goal-advice-modal ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+}
+
+.goal-advice-modal ion-list {
+    background: transparent;
+}
+
+.goal-advice-modal .milestone-date {
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+}
+
+.goal-advice-modal .milestone-amount {
+    color: var(--ion-color-primary);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.analyze-button {
+    margin: 20px;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 12px rgba(var(--ion-color-tertiary-rgb), 0.2);
+}
+
+.analyze-button ion-icon {
+    margin-right: 8px;
+}
+
+/* Loading animation */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 16px;
+    color: var(--ion-color-primary);
+}

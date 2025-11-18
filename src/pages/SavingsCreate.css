@@ -1,0 +1,90 @@
+.savings-create-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.savings-create-form ion-card {
+    margin: 16px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.savings-create-form ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --background: transparent;
+    margin-bottom: 16px;
+}
+
+.savings-create-form ion-label {
+    font-weight: 500;
+    color: var(--ion-color-medium);
+}
+
+.savings-create-form ion-input,
+.savings-create-form ion-select,
+.savings-create-form ion-textarea {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    --background: #F8F9FB;
+    --border-radius: 12px;
+    margin-top: 8px;
+}
+
+.savings-create-form ion-datetime-button {
+    background: #F8F9FB;
+    border-radius: 12px;
+    margin-top: 8px;
+    width: 100%;
+}
+
+.savings-create-form .file-upload-button {
+    --background: #F8F9FB;
+    --color: var(--ion-color-medium);
+    --border-radius: 12px;
+    --box-shadow: none;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.savings-create-form .calculate-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    height: 36px;
+    margin: 0;
+}
+
+.savings-create-form .error-message {
+    color: var(--ion-color-danger);
+    font-size: 12px;
+    margin-top: 4px;
+    padding-left: 16px;
+}
+
+.savings-create-form .action-buttons {
+    padding: 16px;
+}
+
+.savings-create-form .action-buttons ion-button {
+    margin: 8px 0;
+}
+
+/* Invalid state styling */
+.savings-create-form .ion-invalid ion-input,
+.savings-create-form .ion-invalid ion-select,
+.savings-create-form .ion-invalid ion-datetime-button {
+    --background: rgba(var(--ion-color-danger-rgb), 0.1);
+}
+
+/* Responsive grid */
+@media (min-width: 768px) {
+    .savings-create-form ion-row {
+        margin: 0 -8px;
+    }
+    
+    .savings-create-form ion-col {
+        padding: 0 8px;
+    }
+}

@@ -105,3 +105,8 @@ app/src/main/res/xml/config.xml
 
 # Build output directory
 dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
